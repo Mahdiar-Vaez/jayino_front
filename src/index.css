@@ -1,0 +1,133 @@
+@import "tailwindcss";
+@font-face {
+  font-family: 'danaMedium';
+  src:
+    url('./assets/fonts/DanaFaNum-Medium.woff2') format('woff2'),
+}
+@font-face {
+  font-family: 'danaLight';
+  src:
+    url('./assets/fonts/DanaFaNum-Light.woff2') format('woff2'),
+}
+@font-face {
+  font-family: 'danaBold';
+  src:
+    url('./assets/fonts/DanaFaNum-Bold.woff2') format('woff2'),
+}
+@font-face {
+  font-family: 'danaDBold';
+  src:
+    url('./assets/fonts/DanaFaNum-DemiBold.woff2') format('woff2'),
+}
+@theme {
+  --font-danaMedium: 'danaMedium', sans-serif;
+  --font-danaLight: 'danaLight', sans-serif;
+  --font-danaBold: 'danaBold', sans-serif;
+  --font-danaDBold: 'danaDBold', sans-serif;
+
+}
+
+*{
+  font-family: 'danaMedium', sans-serif !important;
+}
+.Toastify__toast ,.Toastify__toast-theme--light ,.Toastify__toast--success ,.Toastify__toast--rtl{
+  font-family: 'danaMedium'!important;
+}
+button{
+  cursor: pointer !important;
+}
+
+
+/*  custome css for plate */
+.license-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffbf00;
+  padding: 20px;
+}
+
+.license-plate {
+  background-color: #ddd;
+  border: 0.08em solid #333;
+  border-radius: 0.3em;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  font-family: "Markazi Text", sans-serif;
+  box-shadow: inset 0.05em 0.05em 0.1em rgba(0, 0, 0, 0.3),
+    inset -0.05em -0.05em 0.1em #ffffff,
+    0.05em 0.05em 0.1em rgba(0, 0, 0, 0.3);
+  direction: rtl;
+}
+
+.blue-column {
+  width: 25px;
+  background-color: #042591;
+  color: #fff;
+  text-align: left;
+  font-size: 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 2px 4px;
+}
+
+.flag div {
+  height: 2px;
+}
+
+.flag div:nth-child(1) {
+  background-color: green;
+}
+.flag div:nth-child(2) {
+  background-color: #fff;
+}
+.flag div:nth-child(3) {
+  background-color: red;
+}
+
+.plate-input {
+  background: transparent;
+  border: none;
+  text-align: center;
+  font-size: 26px;
+  font-weight: bold;
+  color: #222;
+  width: 38px;
+  margin: 0 2px;
+  text-shadow: 0.02em 0.02em 0.03em rgba(0, 0, 0, 0.3),
+    -0.03em -0.03em 0.02em #fff;
+}
+
+.plate-input:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 0.15em;
+}
+
+.iran-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-left: 0.08em solid #333;
+  text-align: center;
+  width: 35px;
+}
+
+.iran-column span {
+  font-size: 8px;
+}
+
+.iran-column input {
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  background: transparent;
+  border: none;
+  width: 30px;
+}
+/* fix mui */
+.css-1unujym .MuiTablePagination-root{
+  direction: ltr !important;
+}

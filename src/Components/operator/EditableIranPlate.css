@@ -1,0 +1,66 @@
+.plate-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.plate {
+  display: flex;
+  background: #ddd;
+  border: 2px solid #222;
+  border-radius: 6px;
+  font-family: sans-serif;
+  direction: ltr;
+}
+
+.plate-blue {
+  background: #003399;
+  color: white;
+  width: 28px;
+  padding: 4px;
+  font-size: 8px;
+}
+
+
+.flag span {
+  display: block;
+  height: 3px;
+}
+.flag .g { background: green; }
+.flag .w { background: white; }
+.flag .r { background: red; }
+
+.plate-input {
+  width: 40px;
+  font-size: 26px;
+  text-align: center;
+  border: none;
+  background: transparent;
+  font-weight: bold;
+}
+
+.plate-input:focus {
+  outline: none;
+  background: rgba(255,255,255,0.6);
+}
+
+.plate-letter {
+  width: 32px;
+}
+
+.wide {
+  width: 56px;
+}
+
+.plate-iran {
+  border-left: 2px solid #222;
+  width: 40px;
+  text-align: center;
+}
+
+.plate-iran span {
+  font-size: 10px;
+}
+
+.iran {
+  font-size: 8px;
+}
