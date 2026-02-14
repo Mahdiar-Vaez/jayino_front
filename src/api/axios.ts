@@ -1,6 +1,6 @@
 import axios from "axios";
 const api = axios.create({
-  baseURL: import.meta.env.API_BASE_URL||"http://localhost:5005/api",
+  baseURL: import.meta.env.API_BASE_URL||"https://backend.jayino.ir/api",
 });
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
