@@ -1,0 +1,1 @@
+const progress = parkingStats ? Math.round(((parkingStats.insideCount || 0) / (parkingStats.capacity || 1)) * 100 * 100) / 100 : 0;
