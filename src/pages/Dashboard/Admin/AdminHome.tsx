@@ -122,13 +122,20 @@ const AdminDashboard = () => {
       icon: <LogOut />,
       color: theme.palette.success.main,
     },
-    {
-      title: "ظرفیت خالی",
-      value: toPersianNumber(parkingStats?.available),
-      icon: <AlignHorizontalSpaceAround />,
-      progress: parkingStats ? ((parkingStats.insideCount || 0) / (parkingStats.capacity || 1)) * 100 : 0,
-      color: theme.palette.warning.main,
-    },
+{
+  title: "ظرفیت خالی",
+  value: toPersianNumber(parkingStats?.available),
+  icon: <AlignHorizontalSpaceAround />,
+  progress: parkingStats
+    ? Number(
+        (
+          ((parkingStats.insideCount || 0) / (parkingStats.capacity || 1)) *
+          100
+        ).toFixed(2)
+      )
+    : 0,
+  color: theme.palette.warning.main,
+},
     {
       title: "درآمد امروز",
       value: formatCurrency(todayRevenue),
