@@ -25,9 +25,13 @@ import UserFormModal from "../../../Components/admin/users/UserFormmodals";
 import ChangePasswordModal from "../../../Components/admin/users/ChangePassword";
 import DeleteConfirmModal from "../../../Components/admin/users/DeleteUsers";
 import { useNotification } from "../../../utils/hooks/useNotification";
+import { useAuth } from "../../../context/useAuth";
 
 export default function AdminUsers() {
   const [refreshKey, setRefreshKey] = useState(0);
+  const { user } = useAuth();
+  const userRole = user?.role; // نقش کاربر فعلی
+
   const [stats, setStats] = useState({
     total: 0,
     admin: 0,
@@ -47,7 +51,7 @@ export default function AdminUsers() {
   // ========== دریافت آمار ==========
   const fetchStats = async () => {
     try {
-      const res = await api.get("/users/reports"); // ✅ یک endpoint واحد
+      const res = await api.get("/users/reports");
       setStats(res.data.data);
     } catch (error) {
       console.error("خطا در دریافت آمار:", error);
@@ -82,7 +86,6 @@ export default function AdminUsers() {
   };
 
   const handleSubmitUser = async (data: any) => {
-    console.log("🚀 ~ handleSubmitUser ~ data:", data)
     try {
       if (modalMode === "create") {
         await api.post("/auth/register", data);
@@ -103,22 +106,23 @@ export default function AdminUsers() {
   };
 
   const handleChangePassword = async (userId: string, password: string) => {
-    await api.put(`/users/${userId}`, { password });
+    await api.patch(`/users/${userId}`, { password });
     showNotification("رمز عبور با موفقیت تغییر کرد", "success");
     setRefreshKey((prev) => prev + 1);
   };
 
   const handleDeleteUser = async () => {
     try {
-     const res= await api.delete(`/users/${selectedUser._id}`);
-      console.log("🚀 ~ handleDeleteUser ~ res:", res)
+      await api.delete(`/users/${selectedUser._id}`);
       showNotification("کاربر با موفقیت حذف شد", "success");
       setRefreshKey((prev) => prev + 1);
       setDeleteModalOpen(false);
       fetchStats();
-    } catch (error:any) {
-      console.log("🚀 ~ handleDeleteUser ~ error:", error)
-      showNotification(error.response.data.message|| "خطا در حذف کاربر", "error");
+    } catch (error: any) {
+      showNotification(
+        error.response?.data?.message || "خطا در حذف کاربر",
+        "error"
+      );
     }
   };
 
@@ -130,51 +134,56 @@ export default function AdminUsers() {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
+          flexWrap:'wrap',
           mb: 4,
         }}
       >
-        <Box>
+        <Box sx={{}}>
           <Typography variant="h4" component="h1" gutterBottom fontWeight="bold">
             مدیریت کاربران
           </Typography>
           <Typography variant="body1" color="text.secondary">
-            در این بخش می‌توانید کاربران سیستم را مدیریت کنید. امکان افزودن، ویرایش، تغییر رمز و حذف کاربران وجود دارد.
+            در این بخش می‌توانید کاربران سیستم را مدیریت کنید.
           </Typography>
         </Box>
-        <Box sx={{ display: "flex", gap: 2 }}>
-          <Tooltip title="به‌روزرسانی">
-            <IconButton
-              onClick={() => {
-                setRefreshKey((prev) => prev + 1);
-                fetchStats();
-              }}
+
+        {/* دکمه افزودن کاربر - فقط برای superAdmin */}
+        {userRole === "superAdmin" && (
+          <Box sx={{ display: "flex", gap: 2 }}>
+            <Tooltip title="به‌روزرسانی">
+              <IconButton
+                onClick={() => {
+                  setRefreshKey((prev) => prev + 1);
+                  fetchStats();
+                }}
+                sx={{
+                  bgcolor: "grey.100",
+                  "&:hover": { bgcolor: "grey.200" },
+                }}
+              >
+                <RefreshCw size={20} />
+              </IconButton>
+            </Tooltip>
+            <Button
+              variant="contained"
+              startIcon={<UserPlus size={18} />}
+              onClick={handleOpenCreateModal}
               sx={{
-                bgcolor: "grey.100",
-                "&:hover": { bgcolor: "grey.200" },
+                px: 3,
+                py: 1,
+                background: "linear-gradient(45deg, #1976d2 30%, #42a5f5 90%)",
+                boxShadow: "0 4px 6px rgba(33, 150, 243, .2)",
+                borderRadius: 2,
               }}
             >
-              <RefreshCw size={20} />
-            </IconButton>
-          </Tooltip>
-          <Button
-            variant="contained"
-            startIcon={<UserPlus size={18} />}
-            onClick={handleOpenCreateModal}
-            sx={{
-              px: 3,
-              py: 1,
-              background: "linear-gradient(45deg, #1976d2 30%, #42a5f5 90%)",
-              boxShadow: "0 4px 6px rgba(33, 150, 243, .2)",
-              borderRadius: 2,
-            }}
-          >
-            افزودن کاربر جدید
-          </Button>
-        </Box>
+              افزودن کاربر جدید
+            </Button>
+          </Box>
+        )}
       </Box>
 
       {/* ========== کارت‌های آمار ========== */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
+      <Grid container spacing={1} sx={{ mb: 4 }}>
         {[
           { label: "کل کاربران", value: stats.total, icon: <Users size={28} />, color: "primary" },
           { label: "مدیران", value: stats.admin, icon: <Shield size={28} />, color: "error" },
@@ -208,14 +217,17 @@ export default function AdminUsers() {
         ))}
       </Grid>
 
-      {/* ========== جدول کاربران ========== */}
-      <UsersTable
+      {/* ========== جدول کاربران با نقش فعلی ========== */}
+      <div className="w-full  overflow-x-auto">
+        <UsersTable
         refresh={refreshKey}
         onEdit={handleOpenEditModal}
-        onDelete={handleOpenDeleteModal}   // ✅ مستقیم user کامل دریافت می‌شود
+        onDelete={handleOpenDeleteModal}
         onPasswordChange={handleOpenPasswordModal}
+        currentUserRole={userRole} // ارسال نقش به جدول
       />
-
+      </div>
+      
       {/* ========== مودال‌ها ========== */}
       <UserFormModal
         open={formModalOpen}

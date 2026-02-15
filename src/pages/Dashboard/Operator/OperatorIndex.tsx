@@ -34,7 +34,7 @@ const OperatorIndex: React.FC = () => {
   useEffect(() => {
     fetchData();
   }, [refreshTrig]);
-  const AvailableCapacity:number=((parkingStats?.insideCount||0)/(parkingStats?.capacity||10))*100
+  const AvailableCapacity:string=(Number((parkingStats?.insideCount||0)/(parkingStats?.capacity||10))*100).toFixed(2)
   const stats = [
     {
       title: "خودروهای داخل پارکینگ",
@@ -63,24 +63,25 @@ const OperatorIndex: React.FC = () => {
     },
   ];
 
-  const handleEntry = async (data: VehicleEntryBody) => {
-    try {
-      setEntryLoading(true);
-      const res = await vehicleEntry(data);
-      console.log("🚀 ~ handleEntry ~ res:", res);
-      if (res.success) {
-        toast.success(res.message);
-        setRefreshtrig(prev=>prev+1)
-      } else {
-        toast.error(res.message || "خطا در ثبت ورود");
-      }
-    } catch (err: any) {
-      console.log("🚀 ~ handleEntry ~ err:", err);
-      toast.error(err.message || "خطای سرور");
-    } finally {
-      setEntryLoading(false);
+const handleEntry = async (data: VehicleEntryBody) => {
+  try {
+    setEntryLoading(true);
+    const res = await vehicleEntry(data);
+    if (res.success) {
+      // بررسی وضعیت ارسال پیامک
+      const smsStatus = res.smsSent ? '✅ پیامک ارسال شد' : '⚠️ پیامک ارسال نشد';
+      toast.success(`${res.message} (${smsStatus})`);
+      setRefreshtrig(prev => prev + 1);
+    } else {
+      toast.error(res.message || "خطا در ثبت ورود");
     }
-  };
+  } catch (err: any) {
+    console.log("🚀 ~ handleEntry ~ err:", err);
+    toast.error(err.message || "خطای سرور");
+  } finally {
+    setEntryLoading(false);
+  }
+};
 
   return (
     <Box>

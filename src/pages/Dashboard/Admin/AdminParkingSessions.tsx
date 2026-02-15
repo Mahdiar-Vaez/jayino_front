@@ -5,8 +5,12 @@ import { BarChart3 } from "lucide-react";
 
 export default function AdminParkingSessions() {
   return (
-    <Box sx={{        p: { xs: 1.5, sm: 2, md: 3 },
+    <Box sx={{        p: { xs: 1.5, sm: 2, md: 3 },width:{
+      xs:'90svw',
+      md:'auto'
+    },
 }}>
+  
        <Paper
               elevation={0}
               sx={{

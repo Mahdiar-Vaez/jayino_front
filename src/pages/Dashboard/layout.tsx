@@ -31,7 +31,7 @@ const DashboardLayout = () => {
   const { user } = useAuth();
 
   return (
-    <Box sx={{ display: 'flex', direction: 'rtl' }}>
+    <Box sx={{  direction: 'rtl' }}>
       <CssBaseline />
       <Navbar handleDrawerToggle={handleDrawerToggle} />
       <Sidebar
@@ -44,9 +44,8 @@ const DashboardLayout = () => {
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
+          p: 1,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
-          // sidebar is anchored to the right, so add right margin on larger screens
           mr: { sm: `${drawerWidth}px` },
         }}
       >

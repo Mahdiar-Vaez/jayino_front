@@ -3,13 +3,14 @@ import { useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import api from "../../../api/axios";
 import ServerDataGrid from "../DataGrid";
-import { userColumns } from "../columns"; // مسیر را مطابق پروژه خود اصلاح کنید
+import { userColumns } from "../columns";
 
 interface UsersTableProps {
   refresh: number;
   onEdit: (user: any) => void;
-  onDelete: (user: any) => void;   // ✅ کل user
+  onDelete: (user: any) => void;
   onPasswordChange: (user: any) => void;
+  currentUserRole?: string; 
 }
 
 export default function UsersTable({
@@ -17,6 +18,7 @@ export default function UsersTable({
   onEdit,
   onDelete,
   onPasswordChange,
+  currentUserRole, // اضافه شد
 }: UsersTableProps) {
   const [rows, setRows] = useState([]);
   const [rowCount, setRowCount] = useState(0);
@@ -58,7 +60,12 @@ export default function UsersTable({
     <Box sx={{ height: 600, width: "100%", direction: "rtl" }}>
       <ServerDataGrid
         rows={rows}
-        columns={userColumns(onEdit, onDelete, onPasswordChange)}
+        columns={userColumns(
+          onEdit,
+          onDelete,
+          onPasswordChange,
+          currentUserRole // ارسال به ستون‌ها
+        )}
         loading={loading}
         page={page}
         pageSize={pageSize}

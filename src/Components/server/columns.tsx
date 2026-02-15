@@ -124,7 +124,7 @@ export const parkingSessionColumns: GridColDef[] = [
     filterable: false,
     align: "right",
     headerName: " انقضا",
-    flex: 1,
+    
     renderCell: (params: GridRenderCellParams<string>) => {
       if (!params.value) {
         return (
@@ -190,7 +190,6 @@ export const parkingSessionColumns: GridColDef[] = [
     filterable: false,
     align: "right",
     headerName: "وضعیت پرداخت",
-    flex: 1,
     renderCell: (params: GridRenderCellParams<string>) => {
       if (params.value === "PAID") {
         return (
@@ -225,7 +224,6 @@ export const parkingSessionColumns: GridColDef[] = [
     headerAlign: "left",
     align: "right",
     headerName: "هزینه (تومان)",
-    flex: 1,
     valueGetter: (_, row) => {
       if (row?.status !== "OUT") return "-";
       return row?.cost ? row.cost.toLocaleString("fa-IR") : "-";
@@ -238,11 +236,16 @@ export const parkingSessionColumns: GridColDef[] = [
     headerAlign: "left",
     align: "right",
     flex: 1,
+        filterable:false,
+
+    width:200,
     valueFormatter: (value) =>
       value ? new Date(value).toLocaleString("fa-IR") : "-",
   },
 
   {
+    width:200,
+    filterable:false,
     headerAlign: "left",
     align: "right",
     field: "exitTime",
@@ -268,13 +271,14 @@ const roleLabels = {
   admin: "مدیر",
   supervisor: "ناظر",
   operator: "اپراتور",
-  superAdmin:"مدیر ارشد"
+  superAdmin: "مدیر ارشد",
 } as const;
 
 export const userColumns = (
   handleEdit: (user: any) => void,
-  handleDelete: (user: any) => void,   // ✅ دریافت کل user
-  handleChangePassword: (user: any) => void
+  handleDelete: (user: any) => void,
+  handleChangePassword: (user: any) => void,
+  currentUserRole?: string
 ): GridColDef[] => [
   {
     field: "rowIndex",
@@ -353,41 +357,50 @@ export const userColumns = (
     sortable: false,
     filterable: false,
     minWidth: 180,
-    renderCell: (params: GridRenderCellParams) => (
-      <Stack direction="row" spacing={1} justifyContent="center">
-        <Tooltip title="ویرایش">
-          <IconButton
-            size="small"
-            sx={{ color: "#1976d2" }}
-            onClick={() => handleEdit(params.row)}
-          >
-            <Edit size={18} />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="تغییر رمز عبور">
-          <IconButton
-            size="small"
-            sx={{ color: "#ed6c02" }}
-            onClick={() => handleChangePassword(params.row)}
-          >
-            <KeyRound size={18} />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="حذف">
-          <IconButton
-            size="small"
-            sx={{ color: "#d32f2f" }}
-            onClick={() => handleDelete(params.row)}   // ✅ کل user ارسال می‌شود
-          >
-            <Trash2 size={18} />
-          </IconButton>
-        </Tooltip>
-      </Stack>
-    ),
+    renderCell: (params: GridRenderCellParams) => {
+      // اگر کاربر فعلی superAdmin نیست، دکمه‌ها نمایش داده نشود
+      if (currentUserRole !== "superAdmin") {
+        return (
+          <Typography variant="caption" color="text.secondary">
+            دسترسی ندارید
+          </Typography>
+        );
+      }
+
+      return (
+        <Stack direction="row" spacing={1} justifyContent="center">
+          <Tooltip title="ویرایش">
+            <IconButton
+              size="small"
+              sx={{ color: "#1976d2" }}
+              onClick={() => handleEdit(params.row)}
+            >
+              <Edit size={18} />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="تغییر رمز عبور">
+            <IconButton
+              size="small"
+              sx={{ color: "#ed6c02" }}
+              onClick={() => handleChangePassword(params.row)}
+            >
+              <KeyRound size={18} />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="حذف">
+            <IconButton
+              size="small"
+              sx={{ color: "#d32f2f" }}
+              onClick={() => handleDelete(params.row)}
+            >
+              <Trash2 size={18} />
+            </IconButton>
+          </Tooltip>
+        </Stack>
+      );
+    },
   },
 ];
-// components/columns/dailyReportColumns.tsx
-
 
 
 const vehicleLabels = {

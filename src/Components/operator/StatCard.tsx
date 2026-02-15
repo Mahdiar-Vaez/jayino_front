@@ -17,7 +17,7 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color, progress
         
         flexDirection: 'column',
         justifyContent: 'space-between',
-        width:{xs:'80svw',sm:'300px'},
+        width:{xs:'80svw',sm:'250px'},
         alignContent:"center",
         borderLeft: `6px solid ${color}`,
         borderRadius: 2,
